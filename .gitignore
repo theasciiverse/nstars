@@ -6,3 +6,6 @@ nstars
 print-starslib
 starslib-test
 test_results
+out/
+stage/
+dist/
