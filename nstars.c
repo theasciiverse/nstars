@@ -122,7 +122,8 @@ int main(int argc, char *argv[])
 	if (colormode == CM_256)
 		init256color();
 
-	new_universe(&u, COLS, LINES-2, MAX_Z);
+	/* at least one line of sky, or new_point() divides by zero (Asciiverse) */
+	new_universe(&u, COLS > 0 ? COLS : 1, LINES > 2 ? LINES-2 : 1, MAX_Z);
 
 	refresh();
 	win_stars = newwin(LINES-2, COLS, 0, 0);
@@ -151,7 +152,7 @@ int main(int argc, char *argv[])
 		usleep(sleep_time);
 
 		// update status line
-		mvwprintw(win_status, 0, 0, "[Console] f:%06d s:%06d", frames, sleep_time);
+		mvwprintw(win_status, 0, 0, "[Console] f:%06d s:%06d  / for a command, any other key quits", frames, sleep_time);
 		wrefresh(win_status);
 
 		// redraw input line
@@ -167,6 +168,14 @@ int main(int argc, char *argv[])
 
 		if (c == -1) continue;
 
+		/* Asciiverse: Ctrl+C and Esc quit, and with the command line
+		 * empty so does any key but / and the history keys */
+		if (c == 3 || c == 27 || (buf_len == 0 && c != '/' &&
+				c != KEY_UP && c != KEY_DOWN && c != KEY_RESIZE)) {
+			quit = 1;
+			continue;
+		}
+
 		switch (c) {
 			/* ALT ESC? Doesn't work...
 			case 27:
@@ -175,6 +184,17 @@ int main(int argc, char *argv[])
 					quit = 1;
 				break;
 			*/
+			case KEY_RESIZE:		/* follow the terminal (Asciiverse) */
+				u->width = COLS > 0 ? COLS : 1;
+				u->height = LINES > 2 ? LINES-2 : 1;
+				wresize(win_stars, u->height, COLS);
+				wresize(win_status, 1, COLS);
+				mvwin(win_status, LINES-2, 0);
+				wresize(win_input, 1, COLS);
+				mvwin(win_input, LINES-1, 0);
+				clear();
+				refresh();
+				break;
 			case KEY_DOWN:
 				if (cmd_hist_loc > -1){
 					cmd_hist_loc--;
