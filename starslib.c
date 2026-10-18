@@ -85,6 +85,8 @@ void kill_point( struct universe* universe, struct points* to_kill )
 				last_ptr->next = p_ptr->next;
 			}
 			free(p_ptr);
+			/* the loop went on to read p_ptr->next after the free (Asciiverse) */
+			break;
 		} else {
 			last_ptr = p_ptr;
 		}
