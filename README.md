@@ -1,3 +1,16 @@
+> **Play it with Asciiverse.** With [av](https://asciiverse.sh), the Asciiverse
+> client:
+>
+> ```
+> av install nstars
+> av play nstars
+> ```
+>
+> Or download the archive for your system from this repository's Releases,
+> unpack it and run `./nstars` (`nstars.exe` on Windows).
+>
+> The original README follows.
+
 # stars
 
  This repo contains code related to simulate moving through a starfield in C.

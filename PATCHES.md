@@ -68,3 +68,9 @@ they come near.
   run under Wine, mono and `-c 256`: stars drawn, q quits with status 0.
   Resizing there is unchecked.
 - macOS: not built here.
+
+## Ours
+
+- **How to play it, at the top of README.md.** A short note on installing and
+  starting it with av, or from a release archive; the original text follows
+  unchanged.
